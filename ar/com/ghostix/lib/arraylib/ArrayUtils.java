@@ -24,7 +24,15 @@ public class ArrayUtils <T extends Comparable<T>>{
     public void setArray(T[] newValue){
         array = newValue;
     }
+    
     //Instance methods
+    public T get(int index){
+        return array[index];
+    }
+    public void set(int index, T newValue){
+        array[index] = newValue;
+    }
+    
     public void changeSize(int newSize){
         //We make a temp array to copy all the stuff in the new sized array
         //And then overwrite the array with the temp one.
@@ -56,6 +64,36 @@ public class ArrayUtils <T extends Comparable<T>>{
             System.out.println("Objective not found.");
             }
         }
+    
+    public void showArray(){
+        //we show the array
+        for(int i=0; i<length(); i++){
+            if(i!=length()-1){
+                System.out.print(getArray()[i] + ", ");       
+            }else{
+                System.out.println(getArray()[i] + ".");
+            }
+        }
+    }
+    public void append(T valueToAdd){
+        changeSize(length()+1);
+        set(length()-1, valueToAdd);
+    }
+    public void delete(T valueToDelete){
+        int index = binarySearch(getArray(), valueToDelete);
+        int length = length();
+        if(index!=-1){
+            swap(getArray(), index, length-1);
+            changeSize(length()-1);
+            for(int i = index; i < length-2; i++){
+                swap(getArray(), i, i+1);
+            }
+        }else{
+            System.out.println("That element doesnt exist.");
+        }
+    }
+    //Static methods
+    
     public static <T extends Comparable<T>> boolean in(T objective, T[] array){
         array = quickSort(array);
         //If the objective is in the array we return true.
@@ -67,7 +105,7 @@ public class ArrayUtils <T extends Comparable<T>>{
         //Binary search algorithm, we divide and conquer, we divide it in half and search from left and right until they met.
         //Then we will be able to find our objective.
         int lowest = 0;
-        int highest = array.length - 1;
+        int highest = array.length; 
         //We use the iterative method to save memory and avoid Stack overflow issues.
         while (lowest <= highest) {
             int mid = lowest + (highest - lowest) / 2;
@@ -82,17 +120,6 @@ public class ArrayUtils <T extends Comparable<T>>{
         }
         return -1;
   }
-    public void showArray(){
-        //we show the array
-        for(int i=0; i<length(); i++){
-            if(i!=length()-1){
-                System.out.print(getArray()[i] + ", ");       
-            }else{
-                System.out.println(getArray()[i] + ".");
-            }
-        }
-    }
-    //Static methods
     public static <T extends Comparable<T>> T[] quickSort(T[] array){
         //We check if there is something to sort.
         if(array == null || array.length == 0){
@@ -152,7 +179,7 @@ public class ArrayUtils <T extends Comparable<T>>{
         return middle;
     }
 
-    private static <T> void swap(T[] array, int i, int j) {
+    public static <T> void swap(T[] array, int i, int j) {
         T temp = array[i];
         array[i] = array[j];
         array[j] = temp;
