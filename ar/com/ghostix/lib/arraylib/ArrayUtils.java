@@ -37,8 +37,8 @@ public class ArrayUtils <T extends Comparable<T>>{
     public void changeSize(int newSize){
         //We make a temp array to copy all the stuff in the new sized array
         //And then overwrite the array with the temp one.
-        T[] tempArray = (T[]) Array.newInstance(array.getClass().getComponentType(), newSize);
         if(newSize>0){
+            T[] tempArray = (T[]) Array.newInstance(array.getClass().getComponentType(), newSize);
             int size = array.length;
             int limit = Math.min(size, newSize);
             System.arraycopy(array, 0, tempArray, 0, limit);
@@ -46,7 +46,7 @@ public class ArrayUtils <T extends Comparable<T>>{
         }else{
             System.out.println("You cant have a 0 or negative width array.");
         }
-        setArray(tempArray);
+        
         
     }
     public int length(){
@@ -80,39 +80,52 @@ public class ArrayUtils <T extends Comparable<T>>{
         changeSize(length()+1);
         set(length()-1, valueToAdd);
     }
-    public void delete(T valueToDelete){
-        int index = binarySearch(getArray(), valueToDelete);
+    public void delete(T valueToDelete, boolean sorted){
+        int index;
+        if(sorted){
+            index = binarySearch(getArray(), valueToDelete);
+        }else{
+            index = linearSearch(getArray(), valueToDelete);
+        }
         int length = length();
-        if(index!=-1 && length>1){
-            swap(getArray(), index, length-1);
-            changeSize(length()-1);
-            for(int i = index; i < length-2; i++){
-                swap(getArray(), i, i+1);
+        if(index!=-1){
+            if(index!=length-1){
+                for(int i = index; i < length - 1; i++){
+                    set(i, get(i+1));
+                }
             }
-        }else if(index!=-1 && length==1){
-            set(0, null);
+            changeSize(length - 1);
         }
     }
-    public void deleteAll(T valueToDelete){
-        int index = binarySearch(getArray(), valueToDelete);
-        int length = length();
-        if(index!=-1 && length>1){
-            swap(getArray(), index, length-1);
-            changeSize(length()-1);
-            for(int i = index; i < length-2; i++){
-                swap(getArray(), i, i+1);
+    public void deleteAll(T valueToDelete, boolean sorted){
+        int index;
+        int length;
+        do{
+            if(sorted){
+                index = binarySearch(getArray(), valueToDelete);
+            }else{
+                index = linearSearch(getArray(), valueToDelete);
             }
-            deleteAll(valueToDelete);
-        }else if(length==1){
-            set(0, null);
-        }
+            if(index!=-1){
+                length = length();
+                for(int i = index; i < length-1; i++){
+                    set(i, get(i+1));
+                }
+                if(length>1){
+                    changeSize(length-1);
+                }else{
+                    set(0, null);
+                }
+            }
+        }while(index!=-1);
     }
+    
     public void fill(T value){
         Arrays.fill(getArray(), value);
     }
     public void clean(T temp){
         fill(temp);
-        deleteAll(temp);
+        deleteAll(temp, false);
     }
     //Static methods
     
@@ -136,7 +149,7 @@ public class ArrayUtils <T extends Comparable<T>>{
         //Binary search algorithm, we divide and conquer, we divide it in half and search from left and right until they met.
         //Then we will be able to find our objective.
         int lowest = 0;
-        int highest = array.length; 
+        int highest = array.length - 1; 
         //We use the iterative method to save memory and avoid Stack overflow issues.
         while (lowest <= highest) {
             int mid = lowest + (highest - lowest) / 2;
@@ -150,7 +163,16 @@ public class ArrayUtils <T extends Comparable<T>>{
             }
         }
         return -1;
-  }
+     }
+    public static <T extends Comparable<T>> int linearSearch(T[] array, T objective){
+         int length = array.length;
+         for(int i = 0; i < length; i++){
+             if(array[i] != null && array[i].compareTo(objective) == 0){
+                return i;
+             }
+         }
+         return -1;
+     }
     public static <T extends Comparable<T>> T[] quickSort(T[] array){
         //We check if there is something to sort.
         if(array.length!=1){
@@ -220,7 +242,7 @@ public class ArrayUtils <T extends Comparable<T>>{
     }
     public void run(Scanner scan){
         String[] customOptions = {""};
-        String[] hiddenOptions = {"length", "swap", "medianOfThree", "Partition", "quickSort", "in", "binarySearch"};
+        String[] hiddenOptions = {"length", "swap", "medianOfThree", "Partition", "quickSort", "in", "binarySearch", "linearSearch"};
         SubMenu menu = new SubMenu("ArrayUtils", this, false, customOptions, hiddenOptions);
         int option = 0;
         while(option!=menu.getExit()){
