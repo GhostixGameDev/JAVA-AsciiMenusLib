@@ -7,6 +7,7 @@ import java.util.Stack;
 import ar.com.ghostix.lib.asciimenus.SubMenu;
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.Arrays;
 //STANDALONE VERSION
 //We implement Comparable into our generic Class
 public class ArrayUtils <T extends Comparable<T>>{   
@@ -82,15 +83,36 @@ public class ArrayUtils <T extends Comparable<T>>{
     public void delete(T valueToDelete){
         int index = binarySearch(getArray(), valueToDelete);
         int length = length();
-        if(index!=-1){
+        if(index!=-1 && length>1){
             swap(getArray(), index, length-1);
             changeSize(length()-1);
             for(int i = index; i < length-2; i++){
                 swap(getArray(), i, i+1);
             }
-        }else{
-            System.out.println("That element doesnt exist.");
+        }else if(index!=-1 && length==1){
+            set(0, null);
         }
+    }
+    public void deleteAll(T valueToDelete){
+        int index = binarySearch(getArray(), valueToDelete);
+        int length = length();
+        if(index!=-1 && length>1){
+            swap(getArray(), index, length-1);
+            changeSize(length()-1);
+            for(int i = index; i < length-2; i++){
+                swap(getArray(), i, i+1);
+            }
+            deleteAll(valueToDelete);
+        }else if(length==1){
+            set(0, null);
+        }
+    }
+    public void fill(T value){
+        Arrays.fill(getArray(), value);
+    }
+    public void clean(T temp){
+        fill(temp);
+        deleteAll(temp);
     }
     //Static methods
     
@@ -101,7 +123,16 @@ public class ArrayUtils <T extends Comparable<T>>{
             
     }
     public static <T extends Comparable<T>> int binarySearch(T[] array, T objective) {
-            
+        //We handle any exceptions if the array is null or 1 width.
+        if(array.length == 1){
+            if(array[0]==null){
+                return -1;
+            }else if(array[0].compareTo(objective) == 0){
+                return 0;
+            }else{
+                return -1;
+            }
+        }
         //Binary search algorithm, we divide and conquer, we divide it in half and search from left and right until they met.
         //Then we will be able to find our objective.
         int lowest = 0;
@@ -122,31 +153,31 @@ public class ArrayUtils <T extends Comparable<T>>{
   }
     public static <T extends Comparable<T>> T[] quickSort(T[] array){
         //We check if there is something to sort.
-        if(array == null || array.length == 0){
-            return null;
-        }
-        //We use iterative quickSort to save memory.
-        //By doing this we avoid potential Stack overflow issues.
-        //We will use a stack as support. It will store the right and left
-        //Sides and then pop them.
-        Stack<int[]> stack = new Stack<>();
-        stack.push(new int[] {0, array.length-1});
-        //If the stack gets left out without range, it means we finished sorting
-        while(!stack.isEmpty()){
-            int[] range = stack.pop();
-            int lowest = range[0];
-            int highest = range[1];
-            //We partition between our stack range.
-            int pivot = partition(array, lowest, highest);
-            //We add the left and right sides of the pivot respectively to the stack.
-            if(pivot-1 > lowest){
-                stack.push(new int[] {lowest, pivot-1});
+        if(array.length!=1){
+            //We use iterative quickSort to save memory.
+            //By doing this we avoid potential Stack overflow issues.
+            //We will use a stack as support. It will store the right and left
+            //Sides and then pop them.
+            Stack<int[]> stack = new Stack<>();
+            stack.push(new int[] {0, array.length-1});
+            //If the stack gets left out without range, it means we finished sorting
+            while(!stack.isEmpty()){
+                int[] range = stack.pop();
+                int lowest = range[0];
+                int highest = range[1];
+                //We partition between our stack range.
+                int pivot = partition(array, lowest, highest);
+                //We add the left and right sides of the pivot respectively to the stack.
+                if(pivot-1 > lowest){
+                    stack.push(new int[] {lowest, pivot-1});
+                }
+                if(pivot+1 < highest) {
+                    stack.push(new int[] {pivot+1, highest});
+                }
             }
-            if(pivot+1 < highest) {
-                stack.push(new int[] {pivot+1, highest});
-            }
-        }
+                
             
+        }
         return array;
     }
     private static <T extends Comparable<T>> int partition(T[] array, int lowest, int highest){
@@ -180,9 +211,12 @@ public class ArrayUtils <T extends Comparable<T>>{
     }
 
     public static <T> void swap(T[] array, int i, int j) {
-        T temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+        if(array != null && array.length != 0){
+            T temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        
     }
     public void run(Scanner scan){
         String[] customOptions = {""};
