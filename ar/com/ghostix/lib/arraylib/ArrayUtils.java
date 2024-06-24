@@ -257,9 +257,8 @@ public class ArrayUtils <T extends Comparable<T>>{
         
     }
     public static <T> T[] append(T[] array, T valueToAdd){
-        int length = array.length;
-        array = changeSize(array, length+1);
-        array[length-1] = valueToAdd;
+        array = changeSize(array, array.length+1);
+        array[array.length-1] = valueToAdd;
         return array;
     }
     
