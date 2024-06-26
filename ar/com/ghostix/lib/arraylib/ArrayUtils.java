@@ -44,10 +44,8 @@ public class ArrayUtils <T extends Comparable<T>>{
             System.arraycopy(array, 0, tempArray, 0, limit);
             setArray(tempArray);
         }else{
-            System.out.println("You cant have a 0 or negative width array.");
+            T[] tempArray = (T[]) Array.newInstance(array.getClass().getComponentType(), 0);
         }
-        
-        
     }
     public int length(){
         //We return our array length
@@ -164,10 +162,10 @@ public class ArrayUtils <T extends Comparable<T>>{
         }
         return -1;
      }
-    public static <T extends Comparable<T>> int linearSearch(T[] array, T objective){
+    public static <T> int linearSearch(T[] array, T objective){
          int length = array.length;
          for(int i = 0; i < length; i++){
-             if(array[i] != null && array[i].compareTo(objective) == 0){
+             if(array[i].equals(objective)){
                 return i;
              }
          }
@@ -243,22 +241,34 @@ public class ArrayUtils <T extends Comparable<T>>{
     public static <T> T[] changeSize(T[] array, int newSize){
         //We make a temp array to copy all the stuff in the new sized array
         //And then overwrite the array with the temp one.
+        T[] tempArray;
         if(newSize>0){
-            T[] tempArray = (T[]) Array.newInstance(array.getClass().getComponentType(), newSize);
+            tempArray = (T[]) Array.newInstance(array.getClass().getComponentType(), newSize);
             int size = array.length;
             int limit = Math.min(size, newSize);
             System.arraycopy(array, 0, tempArray, 0, limit);
-            return tempArray;
         }else{
-            System.out.println("You cant have a 0 or negative width array.");
-            return array;
+            tempArray = (T[]) Array.newInstance(array.getClass().getComponentType(), 0);
         }
-        
-        
+        return tempArray;
     }
     public static <T> T[] append(T[] array, T valueToAdd){
         array = changeSize(array, array.length+1);
         array[array.length-1] = valueToAdd;
+        return array;
+    }
+    public static <T> T[] delete(T[] array, T valueToDelete){
+        int index;
+        index = linearSearch(array, valueToDelete);
+        int length = array.length;
+        if(index!=-1){
+            if(index!=length-1){
+                for(int i = index; i < length - 1; i++){
+                    swap(array, i, i+1);
+                }
+            }
+            changeSize(array, length - 1);
+        }
         return array;
     }
     
