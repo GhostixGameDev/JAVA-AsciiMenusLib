@@ -1,4 +1,4 @@
-# JAVA-asciimenusLib
+<h1>JAVA-asciimenusLib</h1>
 
 Automatic ascii menus library for my school JAVA assignments. <br />
 In order for this  to work you will need:<br />
