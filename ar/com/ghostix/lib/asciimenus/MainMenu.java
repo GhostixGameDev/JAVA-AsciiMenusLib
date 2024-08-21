@@ -56,45 +56,35 @@ public class MainMenu
         cArg[0] = Scanner.class; //We save this for the run method reflection.
         while(option!=getOptions()){
             //Title printing
-            String line="";
-            for(int i = 0; i<width; i++){
-                line = line + "=";
-            }
+            StringBuilder line= new StringBuilder();
+            line.append("=".repeat(Math.max(0, width)));
             System.out.println(line);
             for(int y = 0; y<height; y++){
                 if(y!=3){
                     //White spaces
-                    line = "|";
-                    for(int x = 1; x<width-1; x++){
-                        line = line + " ";
-                    }
-                    line = line + "|";
+                    line = new StringBuilder("|");
+                    line.append(" ".repeat(Math.max(0, width - 2)));
+                    line.append("|");
                     System.out.println(line);
                 }else{
                     //We print the name
-                    line = "|";
-                    for(int x = 0; x<10; x++){
-                        line = line + " ";
-                    }
-                    line = line + getName();
+                    line = new StringBuilder("|");
+                    line.append(" ".repeat(10));
+                    line.append(getName());
                     int actualLength = line.length();
-                    for(int x = actualLength; x<width - 1; x++){
-                        line = line + " ";
-                    }
-                    line = line + "|";
+                    line.append(" ".repeat(Math.max(0, width - 1 - actualLength)));
+                    line.append("|");
                     System.out.println(line);
                 }
             }
-            line = "";
-            for(int i = 0; i<width; i++){
-                line = line + "=";
-            }
+            line = new StringBuilder();
+            line.append("=".repeat(Math.max(0, width)));
             System.out.println(line);
             //Title finished, now we print the options.
             for(int i = 1; i<getOptions(); i++){
-                System.out.println(i + "- "+ getPattern() + i + ".");
+                System.out.println(STR."\{i}- \{getPattern()}\{i}.");
             }
-            System.out.println(getOptions() + "- Salir.");
+            System.out.println(STR."\{getOptions()}- Salir.");
             System.out.println("==========================");
             System.out.println("Selecciona una opción.");
             option = scan.nextInt();

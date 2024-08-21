@@ -172,23 +172,23 @@ public class SubMenu
                     switch(type){
                         case 1:
                             System.out.println("Ingrese el valor int.");
-                            parameters[i] = new Integer(scan.nextInt());
+                            parameters[i] = scan.nextInt();
                             break;
                         case 2:
                             System.out.println("Ingrese el valor String.");
-                            parameters[i] = new String(scan.nextLine());
+                            parameters[i] = scan.nextLine();
                             break;
                         case 3:
                             System.out.println("Ingrese el valor double.");
-                            parameters[i] = new Double(scan.nextDouble());
+                            parameters[i] = scan.nextDouble();
                             break;
                         case 4:
                             System.out.println("Ingrese el valor boolean.");
-                            parameters[i] = new Boolean(scan.nextBoolean());
+                            parameters[i] = scan.nextBoolean();
                             break;
                         case 5:
                             System.out.println("Ingrese el valor float.");
-                            parameters[i] = new Float(scan.nextFloat());
+                            parameters[i] = scan.nextFloat();
                             break;
                         case 6:
                             parameters[i] = leerArray(scan);
@@ -329,43 +329,43 @@ public class SubMenu
         
     
         //Title printing in ASCII
-        String line="";
+        StringBuilder line= new StringBuilder();
         for(int i = 0; i<width; i++){
-            line = line + "=";
+            line = new StringBuilder(STR."\{line.toString()}=");
         }
         System.out.println(line);
         for(int y = 0; y<height; y++){
             if(y!=3){
                 //Forbid spaces
-                line = "|";
+                line = new StringBuilder("|");
                 for(int x = 1; x<width-1; x++){
-                    line = line + " ";
+                    line.append(" ");
                 }
-                line = line + "|";
+                line.append("|");
                 System.out.println(line);
             }else{
                 //Printing the name
-                line = "|";
+                line = new StringBuilder("|");
                 for(int x = 0; x<10; x++){
-                    line = line + " ";
+                    line = new StringBuilder(STR."\{line.toString()} ");
                 }
-                line = line + getName();
+                line.append(getName());
                 int actualLength = line.length();
                 for(int x = actualLength; x<width - 1; x++){
-                    line = line + " ";
+                    line = new StringBuilder(STR."\{line.toString()} ");
                 }
-                line = line + "|";
+                line.append("|");
                 System.out.println(line);
             }
         }
-        line = "";
+        line = new StringBuilder();
         for(int i = 0; i<width; i++){
-            line = line + "=";
+            line = new StringBuilder(STR."\{line.toString()}=");
         }
         System.out.println(line);
         //Title finished, printing options.
         for(int i = 1; i<getOptions(); i++){
-            System.out.println(i + "- " +String.valueOf(getMethods()[i-1].getName())+".");
+            System.out.println(STR."\{i}- \{String.valueOf(getMethods()[i - 1].getName())}.");
         }
         //If it has custom options, prints them at the end
         if(isCustom()){
@@ -376,7 +376,7 @@ public class SubMenu
             
         }
         //We print the exit option
-        System.out.println(exit + "- Salir.");
+        System.out.println(STR."\{exit}- Salir.");
         //Prompt the user to input.
         System.out.println("==========================");
         System.out.println("Selecciona una opción.");
