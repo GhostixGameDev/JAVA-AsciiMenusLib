@@ -12,7 +12,7 @@ public class ConsoleReader{
         scan = new Scanner(inputStream);
     }
     public <T> boolean askConfirmation(T value){
-        System.out.println(STR."Estas seguro, profe? Valor introducido: \{value} S/N...");
+        System.out.println(STR."¿Estas seguro? Valor introducido: \{value} S/N...");
         String option = scan.next().toLowerCase().substring(0,1);
         return option.equals("s");
     }
@@ -41,6 +41,8 @@ public class ConsoleReader{
             }
             if(askForUserConfirmation){
                 if(askConfirmation(input)){return input;}
+            }else{
+                return input;
             }
         }
 
@@ -53,6 +55,8 @@ public class ConsoleReader{
                 input = scan.nextInt();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número entero. Ingrese otro...");
@@ -68,6 +72,8 @@ public class ConsoleReader{
                 input = scan.nextDouble();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número fraccionario. Ingrese otro...");
@@ -83,6 +89,8 @@ public class ConsoleReader{
                 input = scan.nextFloat();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número fraccionario. Ingrese otro...");
@@ -98,6 +106,8 @@ public class ConsoleReader{
                 input = scan.nextBoolean();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un boolean. Ingrese otro...");
@@ -113,6 +123,8 @@ public class ConsoleReader{
                 input = scan.nextLong();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número. Ingrese otro...");
@@ -128,6 +140,8 @@ public class ConsoleReader{
                 input = scan.nextByte();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un byte. Ingrese otro...");
@@ -143,6 +157,8 @@ public class ConsoleReader{
                 input = scan.nextShort();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número fraccionario. Ingrese otro...");
@@ -158,6 +174,8 @@ public class ConsoleReader{
                 input = scan.nextBigDecimal();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número fraccionario. Ingrese otro...");
@@ -173,6 +191,8 @@ public class ConsoleReader{
                 input = scan.nextBigInteger();
                 if(askForUserConfirmation){
                     if(askConfirmation(input)){return input;}
+                }else{
+                    return input;
                 }
             }catch(InputMismatchException error){
                 System.out.println("El valor ingresado no es un número fraccionario. Ingrese otro...");

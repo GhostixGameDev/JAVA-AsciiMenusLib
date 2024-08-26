@@ -1,8 +1,10 @@
 package ar.com.ghostix.lib.asciimenus;
 import ar.com.ghostix.lib.arraylib.ArrayUtils;
+import ar.com.ghostix.lib.inputLib.ConsoleReader;
+
+import java.io.InputStream;
 import java.util.Scanner;
 import java.lang.reflect.*;
-import java.util.Comparator;
 
 
 public class SubMenu
@@ -15,6 +17,12 @@ public class SubMenu
     private boolean custom;
     private String[] customOptions;
     //CLASS CONSTRUCTOR.
+    public SubMenu(Object object){
+        this.object = object;
+        this.name = "SubMenu";
+        this.options = 1;
+        this.custom = false;
+    }
     public SubMenu(String Name, Object Object, boolean Custom, String[] CustomOptions, String[] hiddenOptions)
     {
         name = Name;
@@ -25,8 +33,8 @@ public class SubMenu
         //We add the custom options to an Array for later use in the menu.
         if(Custom){
             if(CustomOptions[0] != null && CustomOptions[0] != ""){
-                customOptions = new String[CustomOptions.length];
-                customOptions = CustomOptions;
+                this.customOptions = new String[CustomOptions.length];
+                this.customOptions = CustomOptions;
                 customCount = customOptions.length;
             }
             else{
@@ -34,58 +42,10 @@ public class SubMenu
             }
         }
         //We now have to exclude non-relevant methods.
-        
-        Method[] methodsToCheck = object.getClass().getMethods();
-        Method[] validMethods = new Method[methodsToCheck.length];
-        String[] excludedMethods = {"run", "wait", "equals", "toString",
-            "hashCode", "getClass", "notify", "notifyAll"}; //Run and Object methods
-        int originalLength = methodsToCheck.length;
-        int excludedCount = excludedMethods.length;
-        int bypassedCount = 0;
-        int hiddenCount = hiddenOptions.length;
-        boolean allowed;
-        //We sort the arrays and then
-        //CHECK FOR THE RELEVANT METHODS.
-        for(int i=0; i<originalLength; i++){
-            allowed = true;
-            if(!methodsToCheck[i].getName().startsWith("get") && !methodsToCheck[i].getName().startsWith("set")){
-                if(ArrayUtils.in(methodsToCheck[i].getName(), excludedMethods)){
-                        allowed = false;
-                }else if(customOptions!=null){
-                    if(ArrayUtils.in(methodsToCheck[i].getName(), customOptions)){
-                            allowed = false;
-                        }
-                }else if(hiddenOptions!=null){
-                    if(ArrayUtils.in(methodsToCheck[i].getName(), hiddenOptions)){
-                        allowed = false;
-                    }
-                }
-                if(allowed){
-                    options++;
-                    validMethods[i] = methodsToCheck[i];
-                }else{
-                    validMethods[i] = null;
-                }
-            }
-        }
-        //MAKES THE METHODS LIST
-        methods = new Method[options];
-        for(int i=0; i<originalLength; i++){
-            if(methodsToCheck[i] == validMethods[i]){
-                methods[i-bypassedCount] = validMethods[i];
-            }else{
-                bypassedCount++;
-            }
-        }
-        //WE DEFINE THE EXIT OPTION
-        if(isCustom()){
-            exit = getOptions() + getCustomOptions().length;
-        }else{
-            exit = getOptions();
-        }
-        
-        }
-    
+        initializeMethodsList(hiddenOptions);
+
+    }
+
     //GET AND SET METHODS.
     public String getName(){
         return name;
@@ -134,200 +94,205 @@ public class SubMenu
     public void setExit(int newValue){
         exit = newValue;
     }
-    
-    
-    //METHODS
-    
+
+    //Private methods
+    private void initializeMethodsList(String[] hiddenOptions) {
+        Method[] methodsToCheck = object.getClass().getMethods();
+        Method[] validMethods = new Method[methodsToCheck.length];
+        String[] excludedMethods = {"run", "wait", "equals", "toString",
+                "hashCode", "getClass", "notify", "notifyAll"}; //Run and Object methods
+        int originalLength = methodsToCheck.length;
+        int excludedCount = excludedMethods.length;
+        int bypassedCount = 0;
+        int hiddenCount = hiddenOptions.length;
+        boolean allowed;
+        //We sort the arrays and then
+        //CHECK FOR THE RELEVANT METHODS.
+        for(int i=0; i<originalLength; i++){
+            allowed = true;
+            if(!methodsToCheck[i].getName().startsWith("get") && !methodsToCheck[i].getName().startsWith("set")){
+                if(ArrayUtils.in(methodsToCheck[i].getName(), excludedMethods)){
+                    allowed = false;
+                }else if(customOptions!=null){
+                    if(ArrayUtils.in(methodsToCheck[i].getName(), customOptions)){
+                        allowed = false;
+                    }
+                }else if(hiddenOptions !=null){
+                    if(ArrayUtils.in(methodsToCheck[i].getName(), hiddenOptions)){
+                        allowed = false;
+                    }
+                }
+                if(allowed){
+                    options++;
+                    validMethods[i] = methodsToCheck[i];
+                }else{
+                    validMethods[i] = null;
+                }
+            }
+        }
+        //MAKES THE METHODS LIST
+        this.methods = new Method[this.options];
+        for(int i=0; i<originalLength; i++){
+            if(methodsToCheck[i] == validMethods[i]){
+                this.methods[i-bypassedCount] = validMethods[i];
+            }else{
+                bypassedCount++;
+            }
+        }
+        //WE DEFINE THE EXIT OPTION
+        if(isCustom()){
+            this.exit = getOptions() + getCustomOptions().length;
+        }else{
+            this.exit = getOptions();
+        }
+    }
+
+    //Public instance methods
+
     //Automatic asking for non object parameters.
-    public Object[] askParameters(int option, Scanner scan){
+    public Object[] askParameters(int option, ConsoleReader scan){
         int arguments = getMethods()[option-1].getParameters().length;
         Object[] parameters = new Object[arguments];
-        String isSure;
-        try{
-            //We declare an array of parameters, ask the type, and then prompt the user to input.
-            for(int i=0; i<arguments; i++){
-                System.out.println("==========================");
-                System.out.println("ARGUMENTO NÚMERO: " + (i+1));
-                System.out.println("==========================");
-                System.out.println("TIPO DE ARGUMENTO.");
-                System.out.println("1- Int. ");
-                System.out.println("2- String. ");
-                System.out.println("3- Double. ");
-                System.out.println("4- Boolean. ");
-                System.out.println("5- Float. ");
-                System.out.println("6- Array. ");
-                System.out.println("7- Retroceder. ");
-                System.out.println("==========================");
-                System.out.println("Selecciona una opción.");
-                int type = scan.nextInt();
-                System.out.println("==========================");
-                //We confirm the user is sure about the input.
-                System.out.println("Estas seguro?. Si no es así escribe DESHACER");
-                isSure = scan.nextLine();
-                if(isSure==""){
-                    isSure = scan.nextLine();
-                }
-                
-                if(!isSure.equals("DESHACER")){
-                    switch(type){
-                        case 1:
-                            System.out.println("Ingrese el valor int.");
-                            parameters[i] = scan.nextInt();
-                            break;
-                        case 2:
-                            System.out.println("Ingrese el valor String.");
-                            parameters[i] = scan.nextLine();
-                            break;
-                        case 3:
-                            System.out.println("Ingrese el valor double.");
-                            parameters[i] = scan.nextDouble();
-                            break;
-                        case 4:
-                            System.out.println("Ingrese el valor boolean.");
-                            parameters[i] = scan.nextBoolean();
-                            break;
-                        case 5:
-                            System.out.println("Ingrese el valor float.");
-                            parameters[i] = scan.nextFloat();
-                            break;
-                        case 6:
-                            parameters[i] = leerArray(scan);
-                            break;
-                        case 7:
-                            System.out.println("Retrocediendo.");
-                            if(i==0){
-                                i--;
-                            }else{
-                                i = i-2;
-                            }
-                            break;
-                        default:
-                            System.out.println("Opción invalida. Vuelve a ingresarla.");
-                            i--;
-                        }
-                    }else{
+        //We declare an array of parameters, ask the type, and then prompt the user to input.
+        for(int i=0; i<arguments; i++){
+            System.out.println("==========================");
+            System.out.println("ARGUMENTO NÚMERO: " + (i+1));
+            System.out.println("==========================");
+            System.out.println("TIPO DE ARGUMENTO.");
+            System.out.println("1- Int. ");
+            System.out.println("2- String. ");
+            System.out.println("3- Double. ");
+            System.out.println("4- Boolean. ");
+            System.out.println("5- Float. ");
+            System.out.println("6- Array. ");
+            System.out.println("7- Retroceder. ");
+            System.out.println("==========================");
+            int type = scan.input("Selecciona una opción.\n", 0, false);
+            System.out.println("==========================");
+            //We confirm the user is sure about the input.
+            String isSure = scan.input("Estas seguro?. Si no es así escribe DESHACER\n", false);
+            if(!isSure.equals("DESHACER")){
+                switch(type){
+                    case 1:
+                        System.out.println("Ingrese el valor int.");
+                        parameters[i] = scan.input("", 0, true);
+                        break;
+                    case 2:
+                        System.out.println("Ingrese el valor String.");
+                        parameters[i] = scan.input("", 0, true);
+                        break;
+                    case 3:
+                        System.out.println("Ingrese el valor double.");
+                        parameters[i] = scan.input("", 0.0, true);
+                        break;
+                    case 4:
+                        System.out.println("Ingrese el valor boolean.");
+                        parameters[i] = scan.input("", Boolean.FALSE, true);
+                        break;
+                    case 5:
+                        System.out.println("Ingrese el valor float.");
+                        parameters[i] = scan.input("", 0.0f, true);
+                        break;
+                    case 6:
+                        parameters[i] = leerArray(scan);
+                        break;
+                    case 7:
                         System.out.println("Retrocediendo.");
+                        if(i==0){
+                            i--;
+                        }else{
+                            i = i-2;
+                        }
+                        break;
+                    default:
+                        System.out.println("Opción invalida. Vuelve a ingresarla.");
                         i--;
-                            
-                    }
                 }
-            return parameters;
-        }catch(Exception error){
-            //We handle any possible exceptions caused by bad inputs.
-            System.out.println("OCURRIO UN ERROR. VUELVA A INGRESAR.");
-            error.printStackTrace();
-            return askParameters(option, scan);
+            }else{
+                System.out.println("Retrocediendo.");
+                i--;
+
+            }
         }
+        return parameters;
     }
     //Automatic asking for arrays.
-    public Object leerArray(Scanner scan){
-        Object[] parameters; 
-        String isSure;
-        try{
-            //We ask for the size
-            System.out.println("==========================");
-            System.out.println("Ingrese la longitud del Array.");
-            int size = scan.nextInt();
-            //We confirm the user is sure about the input.
-            System.out.println("==========================");
-            System.out.println("Estas seguro?. Si no es así escribe DESHACER");
-            isSure = scan.nextLine();
-            if(isSure==""){
-                isSure = scan.nextLine();
-            }
-            
-            if(!isSure.equals("DESHACER")){
-                //Now we ask for the type
-                System.out.println("==========================");
-                System.out.println("TIPO DE ARGUMENTO.");
-                System.out.println("1- Int. ");
-                System.out.println("2- String. ");
-                System.out.println("3- Double. ");
-                System.out.println("4- Boolean. ");
-                System.out.println("5- Float. ");
-                System.out.println("6- Array. ");
-                System.out.println("==========================");
-                int type = scan.nextInt();
-                //We confirm AGAIN if the user is sure about the input.
-                System.out.println("Estas seguro?. Si no es así escribe DESHACER");
-                isSure = scan.nextLine();
-                if(isSure==""){
-                    isSure = scan.nextLine();
+    public Object leerArray(ConsoleReader scan){
+        Object[] parameters;
+        //We ask for the size
+        System.out.println("==========================");
+        int size = scan.input("Ingrese la longitud del Array.", 0, true);
+        //We confirm the user is sure about the input.
+        System.out.println("==========================");
+        //Now we ask for the type
+        System.out.println("==========================");
+        System.out.println("TIPO DE ARGUMENTO.");
+        System.out.println("1- Int. ");
+        System.out.println("2- String. ");
+        System.out.println("3- Double. ");
+        System.out.println("4- Boolean. ");
+        System.out.println("5- Float. ");
+        System.out.println("6- Array. ");
+        System.out.println("==========================");
+        int type = scan.input("\n", 0, true);
+        //Now we declare and ask values to fill it
+        switch(type){
+            case 1:
+                parameters = new Integer[size];
+                for(int j = 0; j<size; j++){
+                    System.out.println("Ingrese valor int numero " + (j + 1));
+                    parameters[j] = scan.input("", 0, true);
                 }
-                
-                if(!isSure.equals("DESHACER")){
-                    //Now we declare and ask values to fill it
-                    switch(type){
-                        case 1:
-                            parameters = new Integer[size];
-                            for(int j = 0; j<size; j++){
-                                System.out.println("Ingrese valor int numero " + (j + 1));
-                                parameters[j] = scan.nextInt();
-                            }
-                            break;
-                        case 2:
-                            parameters = new String[size];
-                            for(int j = 0; j<size; j++){
-                                System.out.println("Ingrese valor String numero " + (j + 1));
-                                parameters[j] = scan.nextLine();
-                            }
-                            break;
-                        case 3:
-                            parameters = new Double[size];
-                            for(int j = 0; j<size; j++){
-                                System.out.println("Ingrese valor double numero " + (j + 1));
-                                parameters[j] = scan.nextDouble();
-                            }
-                            break;
-                        case 4:
-                            parameters = new Boolean[size];
-                            for(int j = 0; j<size; j++){
-                                System.out.println("Ingrese valor boolean numero " + (j + 1));
-                                parameters[j] = scan.nextBoolean();
-                            }
-                            break;
-                        case 5:
-                            parameters = new Float[size];
-                            for(int j = 0; j<size; j++){
-                                System.out.println("Ingrese valor float numero " + (j + 1));
-                                parameters[j] = scan.nextDouble();
-                            }
-                            break;
-                        case 6:
-                            parameters = new Object[size];
-                            for(int j = 0; j<size; j++){
-                                System.out.println("Ingrese Array numero " + (j + 1));
-                                parameters[j] = leerArray(scan);
-                            }
-                            break;
-                        default:
-                            System.out.println("Opción invalida. Devolviendo null.");
-                            parameters = null;
-                        }
-                    }else{
-                        return leerArray(scan);
-                    }
+                break;
+            case 2:
+                parameters = new String[size];
+                for(int j = 0; j<size; j++){
+                    System.out.println("Ingrese valor String numero " + (j + 1));
+                    parameters[j] = scan.input("", true);
                 }
-            else{
-                return leerArray(scan);
-            }
-            return parameters;
-        }catch(Exception error){
-            //We handle any possible exceptions caused by bad input.
-            System.out.println("OCURRIO UN ERROR. Ingrese otra vez.");
-            error.printStackTrace();
-            return leerArray(scan);
+                break;
+            case 3:
+                parameters = new Double[size];
+                for(int j = 0; j<size; j++){
+                    System.out.println("Ingrese valor double numero " + (j + 1));
+                    parameters[j] = scan.input("\n", 0.0, true);
+                }
+                break;
+            case 4:
+                parameters = new Boolean[size];
+                for(int j = 0; j<size; j++){
+                    System.out.println("Ingrese valor boolean numero " + (j + 1));
+                    parameters[j] = scan.input("\n", Boolean.FALSE, true);
+                }
+                break;
+            case 5:
+                parameters = new Float[size];
+                for(int j = 0; j<size; j++){
+                    System.out.println("Ingrese valor float numero " + (j + 1));
+                    parameters[j] = scan.input("\n", 0.0f, true);;
+                }
+                break;
+            case 6:
+                parameters = new Object[size];
+                for(int j = 0; j<size; j++){
+                    System.out.println("Ingrese Array numero " + (j + 1));
+                    parameters[j] = leerArray(scan);
+                }
+                break;
+            default:
+                System.out.println("Opción invalida. Devolviendo null.");
+                parameters = null;
         }
-
+        return parameters;
     }
     //Run method
-    public int run(Scanner scan){
-        
+    public int run(InputStream inputStream){
+        ConsoleReader scan = new ConsoleReader(inputStream);
         int width = 22 + getName().length(); //11 spaces for the right and left sides of the name
         int height = 7;
         int option = 0;
-        
-    
+
+
         //Title printing in ASCII
         StringBuilder line= new StringBuilder();
         for(int i = 0; i<width; i++){
@@ -373,24 +338,23 @@ public class SubMenu
             for(int i = 0; i<customAmount; i++){
                 System.out.println((i + getOptions()) + "- " + getCustomOptions()[i] + ".");
             }
-            
+
         }
         //We print the exit option
         System.out.println(STR."\{exit}- Salir.");
         //Prompt the user to input.
         System.out.println("==========================");
-        System.out.println("Selecciona una opción.");
-        option = scan.nextInt();
+        option = scan.input("Selecciona una opción.\n", 0, false);
         if(option!=getOptions() && option>0 && option<getOptions()){
-           //We handle possible exceptions at the moment of invoking hypothetical methods.
+            //We handle possible exceptions at the moment of invoking hypothetical methods.
             try{
                 Object[] parameters = askParameters(option, scan);
                 getMethods()[option-1].invoke(getObject(), (parameters));
             }catch(Exception error){
                 error.printStackTrace();
-                
+
             }
-        //Now we check if the option is out of range.
+            //Now we check if the option is out of range.
         }else if(isCustom()){
             if(option<1 && option>getExit()+1){
                 System.out.println("Opcion invalida.");
