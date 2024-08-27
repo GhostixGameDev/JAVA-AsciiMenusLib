@@ -5,7 +5,7 @@ import ar.com.ghostix.lib.arraylib.ArrayUtils;
 import ar.com.ghostix.lib.asciimenus.MainMenu;
 import ar.com.ghostix.lib.asciimenus.examples.*;
 
-public class exampleSelector
+public class ExampleSelector
 {
     public static void main(){
         //We instantiate objects for all of our classes and a Scanner.
