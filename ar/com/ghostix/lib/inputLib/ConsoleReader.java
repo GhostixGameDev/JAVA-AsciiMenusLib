@@ -8,11 +8,17 @@ import java.util.Scanner;
 
 public class ConsoleReader{
     Scanner scan;
+    public ConsoleReader(){
+        scan = new Scanner(System.in);
+    }
+    public ConsoleReader(Scanner scan){
+        this.scan = scan;
+    }
     public ConsoleReader(InputStream inputStream){
         scan = new Scanner(inputStream);
     }
     public <T> boolean askConfirmation(T value){
-        System.out.println(STR."¿Estas seguro? Valor introducido: \{value} S/N...");
+        System.out.println("¿Estas seguro? Valor introducido: " + value + " S/N...");
         String option = scan.next().toLowerCase().substring(0,1);
         return option.equals("s");
     }

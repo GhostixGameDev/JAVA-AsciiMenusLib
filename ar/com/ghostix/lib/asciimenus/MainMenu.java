@@ -33,33 +33,32 @@ public class MainMenu
         this.pattern = "Option ";
     }
     //Get and set Methods
-    public String getName(){
+    public String getName() {
         return name;
     }
-    public void setName(String newValue){
-        name = newValue;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getPattern(){
-        return pattern;
-    }
-    public void setPattern(String newValue){
-        pattern = newValue;
-    }
-    public Object[] getObjects(){
+
+    public Object[] getObjects() {
         return objects;
     }
-    public void setObjects(Object[] newValues){
-        if(newValues.length <= objects.length){
-            objects = newValues;
-        }else{
-            System.out.println("Array out of length");
-        }
+    public void setObjects(Object[] objects) {
+        this.objects = objects;
     }
+
+    public String getPattern() {
+        return pattern;
+    }
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
     public int getOptions(){
         return options;
     }
-    public void setOptions(int newValue){
-        options = newValue;
+    public void setOptions(int options){
+        this.options = options;
     }
     //Main method
     public void run(InputStream inputStream){
@@ -96,9 +95,9 @@ public class MainMenu
             System.out.println(line);
             //Title finished, now we print the options.
             for(int i = 1; i<getOptions(); i++){
-                System.out.println(STR."\{i}- \{getPattern()}\{i}.");
+                System.out.println(i + "- " + getPattern() + i".");
             }
-            System.out.println(STR."\{getOptions()}- Salir.");
+            System.out.println(getOptions() + "- Salir.");
             System.out.println("==========================");
             option = scan.input("Selecciona una opción.\n", 0, false);
             //We prompt the user to input and then call the respective method or close the program.
