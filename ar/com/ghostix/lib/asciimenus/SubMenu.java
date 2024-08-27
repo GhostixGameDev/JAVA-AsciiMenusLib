@@ -333,7 +333,7 @@ public class SubMenu
                 getMethods()[option-1].invoke(getObject(), (parameters));
             }catch(Exception error){
                 error.printStackTrace();
-
+                System.out.println("Algo salio mal...");
             }
             //Now we check if the option is out of range.
         }else if(isCustom()){
