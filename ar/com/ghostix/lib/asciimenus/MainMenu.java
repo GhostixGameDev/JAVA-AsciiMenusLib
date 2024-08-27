@@ -96,9 +96,9 @@ public class MainMenu
             System.out.println(line);
             //Title finished, now we print the options.
             for(int i = 1; i<getOptions(); i++){
-                System.out.println(STR."\{i}- \{getPattern()}\{i}.");
+                System.out.println(i + "- " + getPattern() + i + ".");
             }
-            System.out.println(STR."\{getOptions()}- Salir.");
+            System.out.println(getOptions()+"- Salir.");
             System.out.println("==========================");
             option = scan.input("Selecciona una opción.\n", 0, false);
             //We prompt the user to input and then call the respective method or close the program.
