@@ -9,7 +9,6 @@ public class ExampleSelector
 {
     public static void main(){
         //We instantiate objects for all of our classes and a Scanner.
-        Scanner scan = new Scanner(System.in);
         Point point = new Point(4,3);
         MagicMatrix matrix = new MagicMatrix();
         ArrayUtils<Integer> array = new ArrayUtils<>(Integer.class, 10);

@@ -5,3 +5,4 @@ JAVA-asciimenusLib.iml
 ar/com/ghostix/lib/inputLib/ConsoleReader.java
 .idea/vcs.xml
 .idea/discord.xml
+/out

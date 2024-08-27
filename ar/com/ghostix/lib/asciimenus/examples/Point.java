@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 import java.lang.Math;
 import ar.com.ghostix.lib.asciimenus.SubMenu;
+import ar.com.ghostix.lib.inputLib.ConsoleReader;
 
 public class Point
 {
@@ -44,7 +45,7 @@ public class Point
         System.out.println("DISTANCIA AL ORIGEN: " + distanciaAlOrigen());
     }
     public void run(InputStream inputStream){
-        Scanner scan = new Scanner(inputStream);
+        ConsoleReader scan = new ConsoleReader(inputStream);
         String[] customOptions = {"sumarPunto", "distanciaDe"};
         String[] hiddenOptions = {""};
         SubMenu menu = new SubMenu("Ejercicio 1", this, true, customOptions, hiddenOptions);
@@ -55,17 +56,14 @@ public class Point
             option = menu.run(inputStream);
             switch(option){
                 case 4:
-                    System.out.println("Ingrese X del nuevo punto");
-                    tempX = scan.nextInt();
-                    System.out.println("Ingrese Y del nuevo punto");
-                    tempY = scan.nextInt();
+                    System.out.println();
+                    tempX = scan.input("Ingrese X del nuevo punto.\n", 0, false);
+                    tempY = scan.input("Ingrese Y del nuevo punto.\n", 0, false);
                     System.out.println("La distancia es: " + distanciaDe(new Point(tempX, tempY)));
                     break;
                 case 5:
-                    System.out.println("Ingrese X del nuevo punto");
-                    tempX = scan.nextInt();
-                    System.out.println("Ingrese Y del nuevo punto");
-                    tempY = scan.nextInt();
+                    tempX = scan.input("Ingrese X del nuevo punto.\n", 0, false);
+                    tempY = scan.input("Ingrese Y del nuevo punto.\n", 0, false);;
                     sumarPunto(new Point(tempX, tempY));
                     break;
                 }

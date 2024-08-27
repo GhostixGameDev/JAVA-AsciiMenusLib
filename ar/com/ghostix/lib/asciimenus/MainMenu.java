@@ -111,7 +111,7 @@ public class MainMenu
                 }
             }else{
                 if(option!=getOptions()){
-                    System.out.println("Opcion invalida.");
+                    System.out.println("Opción invalida.");
                 }else{
                     System.out.println("Cerrando el programa.");
                 }
