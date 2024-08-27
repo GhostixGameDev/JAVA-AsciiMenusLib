@@ -88,14 +88,14 @@ public class MainMenu
                     line.append(" ".repeat(Math.max(0, width - 1 - actualLength)));
                     line.append("|");
                 }
-                System.out.println(line);
+                System.out.println(line.toString());
             }
             line = new StringBuilder();
             line.append("=".repeat(Math.max(0, width)));
-            System.out.println(line);
+            System.out.println(line.toString());
             //Title finished, now we print the options.
             for(int i = 1; i<getOptions(); i++){
-                System.out.println(i + "- " + getPattern() + i".");
+                System.out.println(i + "- " + getPattern() + i + ".");
             }
             System.out.println(getOptions() + "- Salir.");
             System.out.println("==========================");

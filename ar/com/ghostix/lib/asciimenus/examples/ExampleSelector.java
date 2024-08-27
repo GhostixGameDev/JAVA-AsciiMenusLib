@@ -22,6 +22,6 @@ public class ExampleSelector
         //We instantiate a new MainMenu with the parameters of
         //Menu name, Options name, Objects to execute.
         MainMenu menu = new MainMenu("EXAMPLE", "Example ", options);
-        menu.run(scan);
+        menu.run(System.in);
     }
 }

@@ -1,6 +1,7 @@
 package ar.com.ghostix.lib.asciimenus.examples;
 
 
+import java.io.InputStream;
 import java.util.Scanner;
 import java.lang.Math;
 import ar.com.ghostix.lib.asciimenus.SubMenu;
@@ -71,7 +72,7 @@ public class MagicMatrix
         }
         return true;
     }
-    public void run(Scanner scan){
+    public void run(InputStream inputStream){
         String[] customOptions = {""};
         String[] hiddenOptions = {""};
         //We give SubMenu a name, the object, if it has custom options, an array of custom options and an array of hidden options.
@@ -81,7 +82,7 @@ public class MagicMatrix
         //While the option isnt the exit option, we call run and
         //save it in an integer.
         while(option!=menu.getExit()){
-            option = menu.run(scan);
+            option = menu.run(inputStream);
         }
     }
     

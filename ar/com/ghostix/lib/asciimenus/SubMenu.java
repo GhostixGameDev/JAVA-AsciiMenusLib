@@ -174,30 +174,25 @@ public class SubMenu
             if(!isSure.equals("DESHACER")){
                 switch(type){
                     case 1:
-                        System.out.println("Ingrese el valor int.");
-                        parameters[i] = scan.input("", 0, true);
+                        parameters[i] = scan.input("Ingrese el valor int.\n", 0, true);
                         break;
                     case 2:
-                        System.out.println("Ingrese el valor String.");
-                        parameters[i] = scan.input("", 0, true);
+                        parameters[i] = scan.input("Ingrese el valor String.\n", 0, true);
                         break;
                     case 3:
-                        System.out.println("Ingrese el valor double.");
-                        parameters[i] = scan.input("", 0.0, true);
+                        parameters[i] = scan.input("Ingrese el valor double.\n", 0.0, true);
                         break;
                     case 4:
-                        System.out.println("Ingrese el valor boolean.");
-                        parameters[i] = scan.input("", Boolean.FALSE, true);
+                        parameters[i] = scan.input("Ingrese el valor boolean.\n", Boolean.FALSE, true);
                         break;
                     case 5:
-                        System.out.println("Ingrese el valor float.");
-                        parameters[i] = scan.input("", 0.0f, true);
+                        parameters[i] = scan.input("Ingrese el valor float.\n", 0.0f, true);
                         break;
                     case 6:
                         parameters[i] = leerArray(scan);
                         break;
                     case 7:
-                        System.out.println("Retrocediendo.");
+                        System.out.println("Retrocediendo...");
                         if(i==0){
                             i--;
                         }else{
@@ -240,42 +235,39 @@ public class SubMenu
             case 1:
                 parameters = new Integer[size];
                 for(int j = 0; j<size; j++){
-                    System.out.println("Ingrese valor int numero " + (j + 1));
-                    parameters[j] = scan.input("", 0, true);
+                    System.out.println();
+                    parameters[j] = scan.input("Ingrese valor int número " + String.valueOf(j + 1) + "\n", 0, true);
                 }
                 break;
             case 2:
                 parameters = new String[size];
                 for(int j = 0; j<size; j++){
-                    System.out.println("Ingrese valor String numero " + (j + 1));
-                    parameters[j] = scan.input("", true);
+                    parameters[j] = scan.input("Ingrese valor int número " + String.valueOf(j + 1) + "\n", true);
                 }
                 break;
             case 3:
                 parameters = new Double[size];
                 for(int j = 0; j<size; j++){
-                    System.out.println("Ingrese valor double numero " + (j + 1));
-                    parameters[j] = scan.input("\n", 0.0, true);
+                    System.out.println();
+                    parameters[j] = scan.input("Ingrese valor double número " + String.valueOf(j + 1) + "\n", 0.0, true);
                 }
                 break;
             case 4:
                 parameters = new Boolean[size];
                 for(int j = 0; j<size; j++){
-                    System.out.println("Ingrese valor boolean numero " + (j + 1));
-                    parameters[j] = scan.input("\n", Boolean.FALSE, true);
+                    parameters[j] = scan.input("Ingrese valor boolean número " + String.valueOf(j + 1) + "\n", Boolean.FALSE, true);
                 }
                 break;
             case 5:
                 parameters = new Float[size];
                 for(int j = 0; j<size; j++){
-                    System.out.println("Ingrese valor float numero " + (j + 1));
-                    parameters[j] = scan.input("\n", 0.0f, true);;
+                    parameters[j] = scan.input("Ingrese valor float número " + String.valueOf(j + 1) + "\n", 0.0f, true);;
                 }
                 break;
             case 6:
                 parameters = new Object[size];
                 for(int j = 0; j<size; j++){
-                    System.out.println("Ingrese Array numero " + (j + 1));
+                    System.out.println("Ingrese Array número " + (j + 1));
                     parameters[j] = leerArray(scan);
                 }
                 break;
@@ -293,44 +285,33 @@ public class SubMenu
         int option = 0;
 
 
-        //Title printing in ASCII
+        //Title printing
         StringBuilder line= new StringBuilder();
-        for(int i = 0; i<width; i++){
-            line = new StringBuilder(STR."\{line.toString()}=");
-        }
+        line.append("=".repeat(Math.max(0, width)));
         System.out.println(line);
         for(int y = 0; y<height; y++){
             if(y!=3){
-                //Forbid spaces
+                //White spaces
                 line = new StringBuilder("|");
-                for(int x = 1; x<width-1; x++){
-                    line.append(" ");
-                }
+                line.append(" ".repeat(Math.max(0, width - 2)));
                 line.append("|");
-                System.out.println(line);
             }else{
-                //Printing the name
+                //We print the name
                 line = new StringBuilder("|");
-                for(int x = 0; x<10; x++){
-                    line = new StringBuilder(STR."\{line.toString()} ");
-                }
+                line.append(" ".repeat(10));
                 line.append(getName());
                 int actualLength = line.length();
-                for(int x = actualLength; x<width - 1; x++){
-                    line = new StringBuilder(STR."\{line.toString()} ");
-                }
+                line.append(" ".repeat(Math.max(0, width - 1 - actualLength)));
                 line.append("|");
-                System.out.println(line);
             }
+            System.out.println(line.toString());
         }
         line = new StringBuilder();
-        for(int i = 0; i<width; i++){
-            line = new StringBuilder(STR."\{line.toString()}=");
-        }
-        System.out.println(line);
-        //Title finished, printing options.
+        line.append("=".repeat(Math.max(0, width)));
+        System.out.println(line.toString());
+        //Title finished, now we print the options.
         for(int i = 1; i<getOptions(); i++){
-            System.out.println(STR."\{i}- \{String.valueOf(getMethods()[i - 1].getName())}.");
+            System.out.println(i + "- " + String.valueOf(getMethods()[i - 1].getName()) + ".");
         }
         //If it has custom options, prints them at the end
         if(isCustom()){
@@ -341,7 +322,7 @@ public class SubMenu
 
         }
         //We print the exit option
-        System.out.println(STR."\{exit}- Salir.");
+        System.out.println(getExit() + "- Salir.");
         //Prompt the user to input.
         System.out.println("==========================");
         option = scan.input("Selecciona una opción.\n", 0, false);

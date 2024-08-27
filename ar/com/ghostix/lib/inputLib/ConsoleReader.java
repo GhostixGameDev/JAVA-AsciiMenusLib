@@ -31,6 +31,8 @@ public class ConsoleReader{
             input = scan.nextLine();
             if(askForUserConfirmation){
                 if(askConfirmation(input)){return input;}
+            }else{
+                return input;
             }
         }
     }

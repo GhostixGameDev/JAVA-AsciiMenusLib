@@ -1,6 +1,7 @@
 package ar.com.ghostix.lib.arraylib;
 
 
+import java.io.InputStream;
 import java.util.Scanner;
 import java.lang.Math;
 import java.util.Stack;
@@ -273,13 +274,13 @@ public class ArrayUtils <T extends Comparable<T>>{
     }
     
     
-    public void run(Scanner scan){
+    public void run(InputStream inputStream){
         String[] customOptions = {""};
         String[] hiddenOptions = {"length", "swap", "medianOfThree", "Partition", "quickSort", "in", "binarySearch", "linearSearch"};
         SubMenu menu = new SubMenu("ArrayUtils", this, false, customOptions, hiddenOptions);
         int option = 0;
         while(option!=menu.getExit()){
-            option = menu.run(scan);
+            option = menu.run(inputStream);
         }
     }
     
