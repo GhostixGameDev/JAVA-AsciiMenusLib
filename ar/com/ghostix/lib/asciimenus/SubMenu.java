@@ -3,11 +3,10 @@ import ar.com.ghostix.lib.arraylib.ArrayUtils;
 import ar.com.ghostix.lib.inputLib.ConsoleReader;
 
 import java.io.InputStream;
-import java.util.Scanner;
 import java.lang.reflect.*;
 
 
-public class SubMenu
+public class SubMenu implements ITitlePrinter
 {
     private String name;
     private Method[] methods;
@@ -22,27 +21,27 @@ public class SubMenu
         this.name = "SubMenu";
         this.options = 1;
         this.custom = false;
+        this.customOptions = null;
+        //We now have to exclude non-relevant methods.
+        initializeMethodsList(new String[]{""});
     }
     public SubMenu(String Name, Object Object, boolean Custom, String[] CustomOptions, String[] hiddenOptions)
     {
         name = Name;
         object = Object;
         options = 1;
-        int customCount = 0;
         custom = Custom;
         //We add the custom options to an Array for later use in the menu.
         if(Custom){
-            if(CustomOptions[0] != null && CustomOptions[0] != ""){
-                this.customOptions = new String[CustomOptions.length];
+            if(CustomOptions[0] != null && !CustomOptions[0].isEmpty()){
                 this.customOptions = CustomOptions;
-                customCount = customOptions.length;
             }
             else{
                 custom = false;
             }
         }
         //We now have to exclude non-relevant methods.
-        initializeMethodsList(hiddenOptions);
+        initializeMethodsList(null);
 
     }
 
@@ -102,9 +101,7 @@ public class SubMenu
         String[] excludedMethods = {"run", "wait", "equals", "toString",
                 "hashCode", "getClass", "notify", "notifyAll"}; //Run and Object methods
         int originalLength = methodsToCheck.length;
-        int excludedCount = excludedMethods.length;
         int bypassedCount = 0;
-        int hiddenCount = hiddenOptions.length;
         boolean allowed;
         //We sort the arrays and then
         //CHECK FOR THE RELEVANT METHODS.
@@ -216,7 +213,7 @@ public class SubMenu
         Object[] parameters;
         //We ask for the size
         System.out.println("==========================");
-        int size = scan.input("Ingrese la longitud del Array.", 0, true);
+        int size = scan.input("Ingrese la longitud del Array.\n", 0, true);
         //We confirm the user is sure about the input.
         System.out.println("==========================");
         //Now we ask for the type
@@ -236,32 +233,32 @@ public class SubMenu
                 parameters = new Integer[size];
                 for(int j = 0; j<size; j++){
                     System.out.println();
-                    parameters[j] = scan.input("Ingrese valor int número " + String.valueOf(j + 1) + "\n", 0, true);
+                    parameters[j] = scan.input("Ingrese valor int número " + (j + 1) + "\n", 0, false);
                 }
                 break;
             case 2:
                 parameters = new String[size];
                 for(int j = 0; j<size; j++){
-                    parameters[j] = scan.input("Ingrese valor int número " + String.valueOf(j + 1) + "\n", true);
+                    parameters[j] = scan.input("Ingrese valor int número " + (j + 1) + "\n", false);
                 }
                 break;
             case 3:
                 parameters = new Double[size];
                 for(int j = 0; j<size; j++){
                     System.out.println();
-                    parameters[j] = scan.input("Ingrese valor double número " + String.valueOf(j + 1) + "\n", 0.0, true);
+                    parameters[j] = scan.input("Ingrese valor double número " + (j + 1) + "\n", 0.0, false);
                 }
                 break;
             case 4:
                 parameters = new Boolean[size];
                 for(int j = 0; j<size; j++){
-                    parameters[j] = scan.input("Ingrese valor boolean número " + String.valueOf(j + 1) + "\n", Boolean.FALSE, true);
+                    parameters[j] = scan.input("Ingrese valor boolean número " + (j + 1) + "\n", Boolean.FALSE, false);
                 }
                 break;
             case 5:
                 parameters = new Float[size];
                 for(int j = 0; j<size; j++){
-                    parameters[j] = scan.input("Ingrese valor float número " + String.valueOf(j + 1) + "\n", 0.0f, true);;
+                    parameters[j] = scan.input("Ingrese valor float número " + (j + 1) + "\n", 0.0f, false);
                 }
                 break;
             case 6:
@@ -280,38 +277,11 @@ public class SubMenu
     //Run method
     public int run(InputStream inputStream){
         ConsoleReader scan = new ConsoleReader(inputStream);
-        int width = 22 + getName().length(); //11 spaces for the right and left sides of the name
-        int height = 7;
-        int option = 0;
-
-
-        //Title printing
-        StringBuilder line= new StringBuilder();
-        line.append("=".repeat(Math.max(0, width)));
-        System.out.println(line);
-        for(int y = 0; y<height; y++){
-            if(y!=3){
-                //White spaces
-                line = new StringBuilder("|");
-                line.append(" ".repeat(Math.max(0, width - 2)));
-                line.append("|");
-            }else{
-                //We print the name
-                line = new StringBuilder("|");
-                line.append(" ".repeat(10));
-                line.append(getName());
-                int actualLength = line.length();
-                line.append(" ".repeat(Math.max(0, width - 1 - actualLength)));
-                line.append("|");
-            }
-            System.out.println(line.toString());
-        }
-        line = new StringBuilder();
-        line.append("=".repeat(Math.max(0, width)));
-        System.out.println(line.toString());
-        //Title finished, now we print the options.
+        int option;
+        printTitle(getName());
+        //We print the options after the title
         for(int i = 1; i<getOptions(); i++){
-            System.out.println(i + "- " + String.valueOf(getMethods()[i - 1].getName()) + ".");
+            System.out.println(i + "- " + (getMethods()[i - 1].getName()) + ".");
         }
         //If it has custom options, prints them at the end
         if(isCustom()){
@@ -344,7 +314,7 @@ public class SubMenu
             }
         }else{
             if(option>getExit() && option<0){
-                System.out.println("Opcion invalida.");
+                System.out.println("Opción invalida.");
             }else if(option==getExit()){
                 System.out.println("Cerrando el programa.");
             }

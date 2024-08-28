@@ -1,13 +1,11 @@
 package ar.com.ghostix.lib.asciimenus.examples;
 
-import java.util.Scanner;
 import ar.com.ghostix.lib.arraylib.ArrayUtils;
 import ar.com.ghostix.lib.asciimenus.MainMenu;
-import ar.com.ghostix.lib.asciimenus.examples.*;
 
 public class ExampleSelector
 {
-    public static void main(){
+    public static void main(String[] args){
         //We instantiate objects for all of our classes and a Scanner.
         Point point = new Point(4,3);
         MagicMatrix matrix = new MagicMatrix();

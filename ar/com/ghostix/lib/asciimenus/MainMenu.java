@@ -2,11 +2,10 @@ package ar.com.ghostix.lib.asciimenus;
 import ar.com.ghostix.lib.inputLib.ConsoleReader;
 
 import java.io.InputStream;
-import java.util.Scanner;
 import java.lang.reflect.*;
 
 //Automatic ascii menus library for my highschool assignments.
-public class MainMenu
+public class MainMenu implements ITitlePrinter
 {
     private String name;
     private Object[] objects;
@@ -63,36 +62,12 @@ public class MainMenu
     //Main method
     public void run(InputStream inputStream){
         ConsoleReader scan = new ConsoleReader(inputStream);
-        int width = 22 + getName().length(); //11 spaces for the right and left sides of the name
-        int height = 7;
         int option = 0;
         Class[] cArg = new Class[1];
         cArg[0] = InputStream.class; //We save this for the run method reflection.
         while(option!=getOptions()){
             //Title printing
-            StringBuilder line= new StringBuilder();
-            line.append("=".repeat(Math.max(0, width)));
-            System.out.println(line);
-            for(int y = 0; y<height; y++){
-                if(y!=3){
-                    //White spaces
-                    line = new StringBuilder("|");
-                    line.append(" ".repeat(Math.max(0, width - 2)));
-                    line.append("|");
-                }else{
-                    //We print the name
-                    line = new StringBuilder("|");
-                    line.append(" ".repeat(10));
-                    line.append(getName());
-                    int actualLength = line.length();
-                    line.append(" ".repeat(Math.max(0, width - 1 - actualLength)));
-                    line.append("|");
-                }
-                System.out.println(line.toString());
-            }
-            line = new StringBuilder();
-            line.append("=".repeat(Math.max(0, width)));
-            System.out.println(line.toString());
+            printTitle(getName());
             //Title finished, now we print the options.
             for(int i = 1; i<getOptions(); i++){
                 System.out.println(i + "- " + getPattern() + i + ".");
