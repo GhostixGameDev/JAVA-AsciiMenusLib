@@ -25,23 +25,35 @@ public class SubMenu implements ITitlePrinter
         //We now have to exclude non-relevant methods.
         initializeMethodsList(new String[]{""});
     }
-    public SubMenu(String Name, Object Object, boolean Custom, String[] CustomOptions, String[] hiddenOptions)
+    public SubMenu(String name, Object object){
+        this.object = object;
+        this.name = name;
+        this.options = 1;
+        this.custom = false;
+        this.customOptions = null;
+        //We now have to exclude non-relevant methods.
+        initializeMethodsList(new String[]{""});
+    }
+    public SubMenu(String name, Object object, String[] customOptions)
     {
-        name = Name;
-        object = Object;
-        options = 1;
-        custom = Custom;
-        //We add the custom options to an Array for later use in the menu.
-        if(Custom){
-            if(CustomOptions[0] != null && !CustomOptions[0].isEmpty()){
-                this.customOptions = CustomOptions;
-            }
-            else{
-                custom = false;
-            }
-        }
+        this.name = name;
+        this.object = object;
+        this.options = 1;
+        this.custom = true;
+        this.customOptions = customOptions;
         //We now have to exclude non-relevant methods.
         initializeMethodsList(null);
+
+    }
+    public SubMenu(String name, Object object, String[] customOptions, String[] hiddenOptions)
+    {
+        this.name = name;
+        this.object = object;
+        this.options = 1;
+        this.custom = true;
+        this.customOptions = customOptions;
+        //We now have to exclude non-relevant methods.
+        initializeMethodsList(hiddenOptions);
 
     }
 

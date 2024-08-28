@@ -9,7 +9,6 @@ import ar.com.ghostix.lib.asciimenus.SubMenu;
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Arrays;
-//STANDALONE VERSION
 //We implement Comparable into our generic Class
 public class ArrayUtils <T extends Comparable<T>>{   
     //Generic array
@@ -277,7 +276,7 @@ public class ArrayUtils <T extends Comparable<T>>{
     public void run(InputStream inputStream){
         String[] customOptions = {""};
         String[] hiddenOptions = {"length", "swap", "medianOfThree", "Partition", "quickSort", "in", "binarySearch", "linearSearch"};
-        SubMenu menu = new SubMenu("ArrayUtils", this, false, customOptions, hiddenOptions);
+        SubMenu menu = new SubMenu("ArrayUtils", this, customOptions, hiddenOptions);
         int option = 0;
         while(option!=menu.getExit()){
             option = menu.run(inputStream);

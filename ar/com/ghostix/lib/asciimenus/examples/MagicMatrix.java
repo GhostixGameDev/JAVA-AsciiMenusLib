@@ -73,10 +73,8 @@ public class MagicMatrix
         return true;
     }
     public void run(InputStream inputStream){
-        String[] customOptions = {""};
-        String[] hiddenOptions = {""};
         //We give SubMenu a name, the object, if it has custom options, an array of custom options and an array of hidden options.
-        SubMenu menu = new SubMenu("Magic Matrix", this, false, customOptions, hiddenOptions);
+        SubMenu menu = new SubMenu("Magic Matrix", this);
         int option = 0;
         //We set up the submenu loop.
         //While the option isnt the exit option, we call run and

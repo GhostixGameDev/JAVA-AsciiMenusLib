@@ -10,7 +10,7 @@ import ar.com.ghostix.lib.inputLib.ConsoleReader;
 public class Point
 {
     
-    private int[] coords = new int[2];
+    private final int[] coords = new int[2];
     
     
     //CLASS CONSTRUCTOR
@@ -47,8 +47,7 @@ public class Point
     public void run(InputStream inputStream){
         ConsoleReader scan = new ConsoleReader(inputStream);
         String[] customOptions = {"sumarPunto", "distanciaDe"};
-        String[] hiddenOptions = {""};
-        SubMenu menu = new SubMenu("Ejercicio 1", this, true, customOptions, hiddenOptions);
+        SubMenu menu = new SubMenu("Ejercicio 1", this, customOptions);
         int option = 0;
         int tempX = 0;
         int tempY = 0;
