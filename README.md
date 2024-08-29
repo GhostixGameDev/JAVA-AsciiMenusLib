@@ -26,15 +26,15 @@ It will look something like<ol>
     </li>
     <li>The options that it will execute (Object[]).</li>
 </ul>
-
-MainMenu constructors:
-MainMenu(Object[] options);
-MainMenu(String name, Object[] options);
-MainMenu(String name, String pattern, Object[] options);
-
-MainMenu methods:
-run(InputStream inputStream);
-
+<br />
+MainMenu constructors:<br />
+MainMenu(Object[] options);<br />
+MainMenu(String name, Object[] options);<br />
+MainMenu(String name, String pattern, Object[] options);<br />
+<br />
+MainMenu methods:<br />
+run(InputStream inputStream);<br />
+<br />
 ==========================================================================<br />
 SubMenu:<br />
 The SubMenu class prints a Menu of options that executes all the methods of the object it is inside of.
@@ -63,21 +63,21 @@ while([option]!=[yourMenu].getExit()){<br />
     option = [yourMenu].run([Scanner]);<br />
     *****Custom options here if you have any******<br />
 }<br />
-SubMenu constructors:
-SubMenu(Object object);
-SubMenu(String name, Object object);
-SubMenu(String name, Object object, String[] customOptions);
-SubMenu(String name, Object object, String[] customOptions, String[] hiddenOptions);
-
-SubMenu methods:
-int run(InputStream inputStream);
-
-
-Interfaces:
-
-ITitlePrinter
-
-Methods:
-printTitle(String name);
+SubMenu constructors: <br />
+SubMenu(Object object);<br />
+SubMenu(String name, Object object);<br />
+SubMenu(String name, Object object, String[] customOptions);<br />
+SubMenu(String name, Object object, String[] customOptions, String[] hiddenOptions);<br />
+<br />
+SubMenu methods:<br />
+int run(InputStream inputStream);<br />
+<br />
+<br />
+Interfaces:<br />
+<br />
+ITitlePrinter<br />
+<br />
+Methods:<br />
+printTitle(String name);<br />
 
 
