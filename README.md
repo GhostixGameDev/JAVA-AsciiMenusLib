@@ -1,83 +1,60 @@
 <h1>JAVA-asciimenusLib</h1>
 
-Automatic ascii menus library for my school JAVA assignments. <br />
-In order for this  to work you will need:<br />
-<ol>
-    <li>A run method with a InputStream parameter in all the classes you want the Main Menu to execute.</li>
-    <li>One instance of MainMenu in... well. The main menu</li>
-</ol>
-1) 
+**JAVA-asciimenusLib** is an automatic ASCII menus library designed to simplify the creation of text-based menus in Java applications. This library provides two main classes: `MainMenu` and `SubMenu`, which allow developers to create interactive menus that can execute methods or run specific classes.
 
-=======================================================================<br />
-MainMenu:<br />
-The MainMenu class prints a Menu of options that executes the run methods of all the objects you give it in the constructor.<br />
+---
 
-You will have to make an Array of type Object[] that stores all your options (Remember that all of them have to have a public Run method with a InputStream parameter).<br />
-Then you will have to make a new instance of MainMenu<br />
-The parameters for MainMenu are:<br />
-<ul>
-    <li>The title (String).</li>
-    <li>The pattern of the options (String). For example "Object ", "Option ", "Class ".<br />
-It will look something like<ol>
-                <li>Object 1.</li>
-                <li>Object 2.</li>
-                <li>Object 3.</li>
-            </ol>
-    </li>
-    <li>The options that it will execute (Object[]).</li>
-</ul>
-<br />
-MainMenu constructors:<br />
-MainMenu(Object[] options);<br />
-MainMenu(String name, Object[] options);<br />
-MainMenu(String name, String pattern, Object[] options);<br />
-<br />
-MainMenu methods:<br />
-run(InputStream inputStream);<br />
-<br />
-==========================================================================<br />
-SubMenu:<br />
-The SubMenu class prints a Menu of options that executes all the methods of the object it is inside of.
-You can make customOptions if there is one method that cant be called with the SubMenu handling of parameters (Everything not readable via ConsoleReader).<br />
-And also you can hide methods from the options list.<br />
-<br />
-<br />
-You will have to add this on your run methods if you want to use it.<br />
-First you have to define an int for the option.<br />
-Second you have to make an Array (String[]) of the customOptions you want to add if you need something not contemplated in the submenu. Ex: Object parameters, Method parameters, Class parameters. If you dont want any just make the array with {""} as the only value.<br />
-Then you will have to make an Array (String[]) of the HiddenOptions you want to add. If you dont want any just make the array with {""} as the only value or dont pass it into the constructor<br />
+### Installation
+Include the library in your Java project by copying the source files from the repository.
 
-We make an instance of our SubMenu. The parameters are:
-<ol>
-    <li>Title (String).</li>
-    <li>Object to extract the methods (this).</li>
-    <li>If there is custom options (Boolean).</li> 
-    <li>The custom options array (String[]).</li>
-    <li>The hidden options array (String[]).</li>
-</ol>
+### Usage
 
-<br />
-After that you will have to set-up the loop for the run method.<br />
-<br />
-while([option]!=[yourMenu].getExit()){<br />
-    option = [yourMenu].run([Scanner]);<br />
-    *****Custom options here if you have any******<br />
-}<br />
-SubMenu constructors: <br />
-SubMenu(Object object);<br />
-SubMenu(String name, Object object);<br />
-SubMenu(String name, Object object, String[] customOptions);<br />
-SubMenu(String name, Object object, String[] customOptions, String[] hiddenOptions);<br />
-<br />
-SubMenu methods:<br />
-int run(InputStream inputStream);<br />
-<br />
-<br />
-Interfaces:<br />
-<br />
-ITitlePrinter<br />
-<br />
-Methods:<br />
-printTitle(String name);<br />
+#### MainMenu
+The `MainMenu` class is designed to display a menu of options and execute the `run` method of the selected option. The options are passed as an array of objects, where each object must have a public `run(InputStream inputStream)` method.
 
+**Constructors:**
+- `MainMenu(Object[] options)`
+- `MainMenu(String name, Object[] options)`
+- `MainMenu(String name, String pattern, Object[] options)`
 
+**Methods:**
+- `void run(InputStream inputStream)`: Executes the selected option's `run` method.
+
+**Example:**
+```java
+Object[] options = {new Option1(), new Option2()};
+MainMenu menu = new MainMenu("Main Menu", "Option ", options);
+menu.run(System.in);
+```
+
+#### SubMenu
+The `SubMenu` class creates a menu that lists methods of a specified object, allowing users to execute them directly. Custom options can be added, and certain methods can be hidden from the menu.
+
+**Constructors:**
+- `SubMenu(Object object)`
+- `SubMenu(String name, Object object)`
+- `SubMenu(String name, Object object, String[] customOptions)`
+- `SubMenu(String name, Object object, String[] customOptions, String[] hiddenOptions)`
+
+**Methods:**
+- `int run(InputStream inputStream)`: Displays the menu and executes the selected method.
+
+**Example:**
+```java
+String[] customOptions = {"Custom Option"};
+SubMenu submenu = new SubMenu("Sub Menu", this, customOptions);
+int option = 0;
+while(option != submenu.getExit()) {
+    option = submenu.run(System.in);
+    // Handle custom options if any
+}
+```
+
+#### Interface: `ITitlePrinter`
+- **Method:** `void printTitle(String name)`: Prints the title of the menu.
+
+### Contributing
+Feel free to fork this repository and submit pull requests.
+
+### License
+This project is open-source, licensed under the MIT License.
