@@ -26,7 +26,7 @@ public class MainMenu implements ITitlePrinter
         this.pattern = "Option ";
     }
     public MainMenu(Object[] objects){
-        this.name = "Ascii-Menus";
+        this.name = "Main menu";
         this.objects = objects;
         this.options = objects.length + 1;
         this.pattern = "Option ";
