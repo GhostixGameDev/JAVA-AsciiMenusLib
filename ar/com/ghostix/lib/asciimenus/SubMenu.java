@@ -23,7 +23,7 @@ public class SubMenu implements ITitlePrinter
         this.custom = false;
         this.customOptions = null;
         //We now have to exclude non-relevant methods.
-        initializeMethodsList(new String[]{""});
+        initializeMethodsList(null);
     }
     public SubMenu(String name, Object object){
         this.object = object;
@@ -32,7 +32,7 @@ public class SubMenu implements ITitlePrinter
         this.custom = false;
         this.customOptions = null;
         //We now have to exclude non-relevant methods.
-        initializeMethodsList(new String[]{""});
+        initializeMethodsList(null);
     }
     public SubMenu(String name, Object object, String[] customOptions)
     {
@@ -122,11 +122,13 @@ public class SubMenu implements ITitlePrinter
             if(!methodsToCheck[i].getName().startsWith("get") && !methodsToCheck[i].getName().startsWith("set")){
                 if(ArrayUtils.in(methodsToCheck[i].getName(), excludedMethods)){
                     allowed = false;
-                }else if(customOptions!=null){
+                }
+                if(customOptions!=null){
                     if(ArrayUtils.in(methodsToCheck[i].getName(), customOptions)){
                         allowed = false;
                     }
-                }else if(hiddenOptions !=null){
+                }
+                if(hiddenOptions !=null){
                     if(ArrayUtils.in(methodsToCheck[i].getName(), hiddenOptions)){
                         allowed = false;
                     }
@@ -142,7 +144,7 @@ public class SubMenu implements ITitlePrinter
         //MAKES THE METHODS LIST
         this.methods = new Method[this.options];
         for(int i=0; i<originalLength; i++){
-            if(methodsToCheck[i] == validMethods[i]){
+            if(methodsToCheck[i].equals(validMethods[i])){
                 this.methods[i-bypassedCount] = validMethods[i];
             }else{
                 bypassedCount++;
