@@ -186,7 +186,7 @@ public class SubMenu implements ITitlePrinter
                         parameters[i] = scan.input("Ingrese el valor int.\n", 0, true);
                         break;
                     case 2:
-                        parameters[i] = scan.input("Ingrese el valor String.\n", 0, true);
+                        parameters[i] = scan.input("Ingrese el valor String.\n", true);
                         break;
                     case 3:
                         parameters[i] = scan.input("Ingrese el valor double.\n", 0.0, true);
@@ -251,7 +251,7 @@ public class SubMenu implements ITitlePrinter
             case 2:
                 parameters = new String[size];
                 for(int j = 0; j<size; j++){
-                    parameters[j] = scan.input("Ingrese valor int número " + (j + 1) + "\n", false);
+                    parameters[j] = scan.input("Ingrese valor String número " + (j + 1) + "\n", false);
                 }
                 break;
             case 3:

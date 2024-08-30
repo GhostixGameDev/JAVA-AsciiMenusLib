@@ -13,7 +13,6 @@ public class ExampleSelector
         Integer[] exampleValues = {37, 8, 9, 92, 40, 70, 1, 3, 4, 19};
         //String[]exampleValues = {"Arroz", "Con", "leche", "Chocolate", "Cebolla", "Zorro", "Cebra"};
         array.setArray(exampleValues);
-        
         //Then we store the objects to execute in an array.
         Object[] options = {point, matrix, array};
         //We instantiate a new MainMenu with the parameters of
