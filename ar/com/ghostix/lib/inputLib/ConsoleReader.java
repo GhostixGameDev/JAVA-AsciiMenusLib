@@ -28,7 +28,7 @@ public class ConsoleReader{
         while(true){
             System.out.print(prompt);
             input = scan.nextLine();
-            input = scan.nextLine();
+            input = input != null ? input : scan.nextLine();
             if(askForUserConfirmation){
                 if(askConfirmation(input)){return input;}
             }else{
@@ -43,7 +43,7 @@ public class ConsoleReader{
             System.out.print(prompt);
             if(lineJump){
                 input = scan.nextLine();
-                input = scan.nextLine();
+                input = input != null ? input : scan.nextLine();
             }else{
                 input = scan.next();
             }

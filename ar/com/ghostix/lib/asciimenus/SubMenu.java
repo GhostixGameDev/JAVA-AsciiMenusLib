@@ -4,6 +4,7 @@ import ar.com.ghostix.lib.inputLib.ConsoleReader;
 
 import java.io.InputStream;
 import java.lang.reflect.*;
+import java.util.ArrayList;
 
 
 public class SubMenu implements ITitlePrinter
@@ -50,7 +51,7 @@ public class SubMenu implements ITitlePrinter
         this.name = name;
         this.object = object;
         this.options = 1;
-        this.custom = true;
+        this.custom = customOptions != null;
         this.customOptions = customOptions;
         //We now have to exclude non-relevant methods.
         initializeMethodsList(hiddenOptions);
@@ -108,61 +109,35 @@ public class SubMenu implements ITitlePrinter
 
     //Private methods
     private void initializeMethodsList(String[] hiddenOptions) {
-        Method[] methodsToCheck = object.getClass().getMethods();
-        Method[] validMethods = new Method[methodsToCheck.length];
+        Method[] methodsToCheck = this.object.getClass().getMethods();
+        ArrayList<Method> validMethods = new ArrayList<>();
         String[] excludedMethods = {"run", "wait", "equals", "toString",
                 "hashCode", "getClass", "notify", "notifyAll"}; //Run and Object methods
-        int originalLength = methodsToCheck.length;
-        int bypassedCount = 0;
-        boolean allowed;
-        //We sort the arrays and then
-        //CHECK FOR THE RELEVANT METHODS.
-        for(int i=0; i<originalLength; i++){
-            allowed = true;
-            if(!methodsToCheck[i].getName().startsWith("get") && !methodsToCheck[i].getName().startsWith("set")){
-                if(ArrayUtils.in(methodsToCheck[i].getName(), excludedMethods)){
-                    allowed = false;
-                }
-                if(customOptions!=null){
-                    if(ArrayUtils.in(methodsToCheck[i].getName(), customOptions)){
-                        allowed = false;
-                    }
-                }
-                if(hiddenOptions !=null){
-                    if(ArrayUtils.in(methodsToCheck[i].getName(), hiddenOptions)){
-                        allowed = false;
-                    }
-                }
-                if(allowed){
-                    options++;
-                    validMethods[i] = methodsToCheck[i];
-                }else{
-                    validMethods[i] = null;
-                }
+        //Check for the relevant methods
+        for(Method method : methodsToCheck){
+            String methodName = method.getName();
+            if(methodName.startsWith("get") || methodName.startsWith("set")){
+                continue;
             }
-        }
-        //MAKES THE METHODS LIST
-        this.methods = new Method[this.options];
-        for(int i=0; i<originalLength; i++){
-            if(methodsToCheck[i].equals(validMethods[i])){
-                this.methods[i-bypassedCount] = validMethods[i];
-            }else{
-                bypassedCount++;
+            if(ArrayUtils.in(methodName, excludedMethods) ||
+                    (hiddenOptions != null && ArrayUtils.in(methodName, hiddenOptions)) ||
+                    (this.customOptions != null && ArrayUtils.in(methodName, this.customOptions))){
+                continue;
             }
+            validMethods.add(method);
+            this.options++;
         }
-        //WE DEFINE THE EXIT OPTION
-        if(isCustom()){
-            this.exit = getOptions() + getCustomOptions().length;
-        }else{
-            this.exit = getOptions();
-        }
+        //Store the valid methods into our array.
+        this.methods = validMethods.toArray(new Method[0]);
+        //Define the exit option.
+        this.exit = isCustom() ? getOptions() + this.customOptions.length : getOptions();
     }
 
     //Public instance methods
 
     //Automatic asking for non object parameters.
     public Object[] askParameters(int option, ConsoleReader scan){
-        int arguments = getMethods()[option-1].getParameters().length;
+        int arguments = getMethods()[option].getParameters().length;
         Object[] parameters = new Object[arguments];
         //We declare an array of parameters, ask the type, and then prompt the user to input.
         for(int i=0; i<arguments; i++){
@@ -204,11 +179,7 @@ public class SubMenu implements ITitlePrinter
                         break;
                     case 7:
                         System.out.println("Retrocediendo...");
-                        if(i==0){
-                            i--;
-                        }else{
-                            i = i-2;
-                        }
+                        i = i == 0 ? i-- : i-2;
                         break;
                     default:
                         System.out.println("Opción invalida. Vuelve a ingresarla.");
@@ -217,7 +188,6 @@ public class SubMenu implements ITitlePrinter
             }else{
                 System.out.println("Retrocediendo.");
                 i--;
-
             }
         }
         return parameters;
@@ -303,35 +273,25 @@ public class SubMenu implements ITitlePrinter
             for(int i = 0; i<customAmount; i++){
                 System.out.println((i + getOptions()) + "- " + getCustomOptions()[i] + ".");
             }
-
         }
-        //We print the exit option
+        //Print the exit option
         System.out.println(getExit() + "- Salir.");
         //Prompt the user to input.
         System.out.println("==========================");
         option = scan.input("Selecciona una opción.\n", 0, false);
-        if(option!=getOptions() && option>0 && option<getOptions()){
-            //We handle possible exceptions at the moment of invoking hypothetical methods.
+        if(option>0 && option < getOptions()){
+            //Handle possible exceptions at the moment of invoking hypothetical methods.
             try{
-                Object[] parameters = askParameters(option, scan);
+                Object[] parameters = askParameters(option - 1, scan);
                 getMethods()[option-1].invoke(getObject(), (parameters));
             }catch(Exception error){
                 error.printStackTrace();
                 System.out.println("Algo salio mal...");
             }
-            //Now we check if the option is out of range.
-        }else if(isCustom()){
-            if(option<1 && option>getExit()+1){
-                System.out.println("Opcion invalida.");
-            }else if(option==exit){
-                System.out.println("Cerrando el programa.");
-            }
-        }else{
-            if(option>getExit() && option<0){
-                System.out.println("Opción invalida.");
-            }else if(option==getExit()){
-                System.out.println("Cerrando el programa.");
-            }
+        }else if(option == getExit()){
+            System.out.println("Cerrando el programa.");
+        }else if (!isCustom()){
+            System.out.println("Opción inválida.");
         }
         //We return the option.
         return option;
