@@ -276,7 +276,7 @@ public class ArrayUtils <T extends Comparable<T>>{
     public void run(InputStream inputStream){
         String[] customOptions = {""};
         String[] hiddenOptions = {"length", "swap", "medianOfThree", "Partition", "quickSort", "in", "binarySearch", "linearSearch"};
-        SubMenu menu = new SubMenu("ArrayUtils", this, customOptions, hiddenOptions);
+        SubMenu menu = new SubMenu("ArrayUtils", this, null, hiddenOptions);
         int option = 0;
         while(option!=menu.getExit()){
             option = menu.run(inputStream);
