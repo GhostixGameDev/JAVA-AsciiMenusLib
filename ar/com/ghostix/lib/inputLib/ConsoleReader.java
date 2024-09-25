@@ -17,10 +17,14 @@ public class ConsoleReader{
     public ConsoleReader(InputStream inputStream){
         scan = new Scanner(inputStream);
     }
+    //Util
     public <T> boolean askConfirmation(T value){
         System.out.println("¿Estas seguro? Valor introducido: " + value + " S/N...");
         String option = scan.next().toLowerCase().substring(0,1);
         return option.equals("s");
+    }
+    public void clean(){
+        scan.nextLine();
     }
     //String.
     public String input(String prompt, boolean askForUserConfirmation){
